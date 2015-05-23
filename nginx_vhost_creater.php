@@ -2,7 +2,6 @@
 
 	/**
 	* Nginx virtual host creater class
-	* @author Tushar Kant Verma
 	*/
 	class NginxVhost
 	{
@@ -138,7 +137,8 @@
 	  location / {
 	  	# First attempt to serve request as file, then
 	    # as directory, then fall back to displaying a 404.
-	  	try_files \$uri \$uri/ =404;
+	  	try_files \$uri \$uri/ @rewrite;
+		expires max;
 	  }
 
 	  location ~ \.php$ {
@@ -150,6 +150,7 @@
 	    fastcgi_pass unix:/var/run/php5-fpm.sock;
 	    fastcgi_index index.php;
 	    include fastcgi_params;
+	    fastcgi_param SCRIPT_FILENAME  /usr/share/nginx/html/{$DOMAIN}/public/$fastcgi_script_name;
 	  }
 	  location ~ /\.ht {
 	    deny all;
